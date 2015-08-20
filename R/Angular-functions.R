@@ -95,3 +95,20 @@ show.selected <- function(angles, n = 1) {
     points(angles[n, 1:2], col = "red", pch = 16)
     points(angles[!is.na(angles[n,-c(1,2)]),1:2], col = "blue")
 }
+
+
+#' Identify points whose two nearest neighbours are in line with or perpendicular to each other
+#'
+#' For each point in the set, uses \code{k.nearest.angles} to obtain the 2 nearest neighbours, then identifies any for which the angle between them is more than pi/8 from perpendicular or parallel.
+#' @param pts An n-by-2 matrix containing the coordinates of the points to be compared.
+#' @return A Boolean array of length n that can be used to filter points or angles. TRUE indicates that the angle between the two nearest neighbours is closer to perpendicular than not; FALSE indicates that the absolute difference, modulo 2pi, is closer to 45 degrees than to 0 or 90.
+#' @export
+#' @examples
+#' k.2 <- k.nearest.angles(p, 2)
+filter.by.2nn <- function(pts) {
+    # get 2 nearest angles & quarter them, then find differences
+    k.2 <- k.nearest.angles(centres, 2)[,3:4] %% (2*pi)
+    k2.diff <- (pi - abs(pi - abs(k.2[,1] - k.2[,2]))) %% (pi/2)
+    incl <- findInterval(k2.diff, c(1,3) * pi/8) != 1
+    incl
+}
