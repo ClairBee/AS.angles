@@ -107,7 +107,7 @@ show.selected <- function(angles, n = 1) {
 #' k.2 <- k.nearest.angles(p, 2)
 filter.by.2nn <- function(pts) {
     # get 2 nearest angles & quarter them, then find differences
-    k.2 <- k.nearest.angles(centres, 2)[,3:4] %% (2*pi)
+    k.2 <- k.nearest.angles(pts, 2)[,3:4] %% (2*pi)
     k2.diff <- (pi - abs(pi - abs(k.2[,1] - k.2[,2]))) %% (pi/2)
     incl <- findInterval(k2.diff, c(1,3) * pi/8) != 1
     incl
